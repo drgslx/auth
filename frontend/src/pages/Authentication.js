@@ -22,6 +22,7 @@ export async function action({ request }) {
     password: data.get('password'),
   };
 
+
   const response = await fetch('http://localhost:8080/' + mode, {
     method: 'POST',
     headers: {
@@ -38,6 +39,9 @@ export async function action({ request }) {
     throw json({ message: 'Could not authenticate user.' }, { status: 500 });
   }
 
-  // soon: manage that token
-  return redirect('/');
+  const resData = await response.json();
+  const token = resData.token;
+
+  localStorage.setItem('token', token);
+    return redirect('/');
 }
